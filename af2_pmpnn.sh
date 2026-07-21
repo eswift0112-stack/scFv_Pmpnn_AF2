@@ -55,8 +55,7 @@ for dir in "$folder_with_pdbs"/*; do
 
 
     #The first amino acid in the chain corresponds to 1 and not PDB residues index for now.
-	cd scFv_Pmpnn_AF2
-	echo $PWD
+
 
     if [ "$determine_CDRs" = "structure" ]; then 
         IFS=" " read design_only_positions <<< $(scripts/find_loops.py $pdb_file --output $to_design)
@@ -75,8 +74,7 @@ for dir in "$folder_with_pdbs"/*; do
 
         IFS=" " read -r design_only_positions <<< $($cmd)
     fi
-cd
-echo $PWD
+
 
     python ProteinMPNN/helper_scripts/parse_multiple_chains.py --input_path=$dir --output_path=$path_for_parsed_chains
     
