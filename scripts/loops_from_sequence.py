@@ -475,6 +475,7 @@ def main():
 
     all_loops = []
     # sequence-wise find all loops
+    ls = args.linker_seq
     for seq in seqs:
 
         if args.linker_seq == '':
