@@ -97,7 +97,7 @@ for dir in "$folder_with_pdbs"/*; do
     scripts/simplify_fasta.py $output_dir/seqs/$trimmed.fa 
     tail -n +3 $trimmed.fa > $dir/${trimmed}_noWT.fa
     head -n +2 $trimmed.fa > $dir/${trimmed}_WT.fa
-	cd localcolabfold
+	cd localcolabfold/localcolabfold/colabfold-conda/bin
 	echo $PWD
 
     colabfold_batch --templates --num-recycle 1 --cache-mmseq-results $dir/${trimmed}.pkl $dir/${trimmed}_WT.fa $dir/structures
