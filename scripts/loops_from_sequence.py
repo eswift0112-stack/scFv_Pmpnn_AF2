@@ -464,10 +464,11 @@ def main():
             for line in file:
                 if line[0] != '>' and len(line) > 5: # find only protein sequences in fasta file
                     seqs.append(line.replace('\n', ''))
-    
+                    
     elif args.fasta_file.split('.')[-1] == 'pdb':
-        sequences = pdb_to_sequence_manual(args.fasta_file)
-
+        # Convert the returned string into a dictionary mapping chain 'A' to the sequence
+        sequences = {'A': pdb_to_sequence_manual(args.fasta_file)}
+    
         for chain, seq in sequences.items():
             if len(seq) > 30: # try and only extract VH/VL chains and NOT any peptides
                 seqs.append(seq)
