@@ -459,7 +459,7 @@ def main():
                 if line[0] != '>' and len(line) > 5: # find only protein sequences in fasta file
                     seqs.append(line.replace('\n', ''))
                     
-        elif args.fasta_file.split('.')[-1] == 'pdb':
+    elif args.fasta_file.split('.')[-1] == 'pdb':
         sequences = pdb_to_sequence_manual(args.fasta_file)
     
         for chain, seq in sequences.items():
