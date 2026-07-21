@@ -57,11 +57,11 @@ for dir in "$folder_with_pdbs"/*; do
     #The first amino acid in the chain corresponds to 1 and not PDB residues index for now.
 
     if [ "$determine_CDRs" = "structure" ]; then 
-        IFS=" " read design_only_positions <<< $(scripts/find_loops.py $pdb_file --output $to_design)
+        IFS=" " read design_only_positions <<< $(scFv_Pmpnn_AF2/scripts/find_loops.py $pdb_file --output $to_design)
     fi
 
     #if [ "$determine_CDRs" = "kabat" ] || [ "$determine_CDRs" = "chothia" ] || [ "$determine_CDRs" = "martin" ]; then
-#	    IFS=" " read design_only_positions <<< $(/scripts/loops_from_sequence.py $pdb_file --scheme $determine_CDRs --output $to_design --dist $ss_near_CDRs --linker-seq $linker_seq --simple_grab $simple_grab)
+#	    IFS=" " read design_only_positions <<< $(scFv_Pmpnn_AF2/scripts/loops_from_sequence.py $pdb_file --scheme $determine_CDRs --output $to_design --dist $ss_near_CDRs --linker-seq $linker_seq --simple_grab $simple_grab)
 #    fi
 
     if [ "$determine_CDRs" = "kabat" ] || [ "$determine_CDRs" = "chothia" ] || [ "$determine_CDRs" = "martin" ]; then
