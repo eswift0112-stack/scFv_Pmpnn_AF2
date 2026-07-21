@@ -51,7 +51,7 @@ for dir in "$folder_with_pdbs"/*; do
     path_for_parsed_chains=$output_dir"/parsed_pdbs.jsonl"
     path_for_assigned_chains=$output_dir"/assigned_pdbs.jsonl"
     path_for_fixed_positions=$output_dir"/fixed_pdbs.jsonl"
-    chains_to_design=$(scripts/longest_chain.py $pdb_file)
+    chains_to_design=$(scFv_Pmpnn_AF2/scripts/longest_chain.py $pdb_file)
 
 
     #The first amino acid in the chain corresponds to 1 and not PDB residues index for now.
@@ -75,13 +75,13 @@ for dir in "$folder_with_pdbs"/*; do
     fi
 
 
-    python $ProteinMPNN/helper_scripts/parse_multiple_chains.py --input_path=$dir --output_path=$path_for_parsed_chains
+    python ProteinMPNN/helper_scripts/parse_multiple_chains.py --input_path=$dir --output_path=$path_for_parsed_chains
     
-    python $ProteinMPNN/helper_scripts/assign_fixed_chains.py --input_path=$path_for_parsed_chains --output_path=$path_for_assigned_chains --chain_list "$chains_to_design"
+    python ProteinMPNN/helper_scripts/assign_fixed_chains.py --input_path=$path_for_parsed_chains --output_path=$path_for_assigned_chains --chain_list "$chains_to_design"
     
-    python $ProteinMPNN/helper_scripts/make_fixed_positions_dict.py --input_path=$path_for_parsed_chains --output_path=$path_for_fixed_positions --chain_list "$chains_to_design" --position_list "$design_only_positions" --specify_non_fixed
+    python ProteinMPNN/helper_scripts/make_fixed_positions_dict.py --input_path=$path_for_parsed_chains --output_path=$path_for_fixed_positions --chain_list "$chains_to_design" --position_list "$design_only_positions" --specify_non_fixed
     
-    python $ProteinMPNN/protein_mpnn_run.py \
+    python ProteinMPNN/protein_mpnn_run.py \
             --jsonl_path $path_for_parsed_chains \
             --chain_id_jsonl $path_for_assigned_chains \
             --fixed_positions_jsonl $path_for_fixed_positions \
