@@ -163,6 +163,7 @@ def pdb_to_sequence_manual(pdb_path):
                         
     return sequences
 
+
 def parse_pdb(pdb_path):
     """ Parse PDB to extract coordinates and other data per atom. """
     atoms = []
@@ -461,7 +462,7 @@ def main():
     
     elif args.fasta_file.split('.')[-1] == 'pdb':
         sequences = pdb_to_sequence_manual(args.fasta_file)
-    
+
         for chain, seq in sequences.items():
             if len(seq) > 30: # try and only extract VH/VL chains and NOT any peptides
                 seqs.append(seq)
@@ -479,7 +480,6 @@ def main():
                     linker_seq = ls
                     break
         else:
-            ls = args.linker_seq
             linker_start = seq.find(ls)
             linker_seq = args.linker_seq
 
