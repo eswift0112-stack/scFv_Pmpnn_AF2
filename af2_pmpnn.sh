@@ -78,19 +78,6 @@ if [ "$pdb_count" -gt 0 ]; then
 fi
 
 echo "finished moving $pdbs"
-
-if [ "$fasta_count" -gt 0 ]; then
-    for fasta_file in $fastas; do
-        base_name=$(basename "$fasta_file" .fasta)
-    
-        if [[ "$base_name" == *"seq"* ]]; then
-            echo "Error: 'seq' pattern found not allowed in input structures! Found 'seq' in: $base_name"
-            exit 1
-        fi
-    
-        # Create a directory for this base name if it doesn't already exist
-        mkdir -p "$folder_with_pdbs/$base_name"
-        
     
 done
 
