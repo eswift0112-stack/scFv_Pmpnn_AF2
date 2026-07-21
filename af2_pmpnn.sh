@@ -26,7 +26,7 @@ linker_seq=GGGGSGGGGSGGGGS                          # specify linker sequence: i
                                        # linker sequences from the following list: 
 				       # ['GGGGSGGGGSGGGGS', 'GGSGGSGGSGGSGGS', 'GSGSGSGSGSGSGS', 'GGGSGGGSGGGSGGS', 'GGGSGGGSGGGS']
 
-PMPNN=home/c21094846ProteinMPNN # the global path to where the ProteinMPNN github was cloned to locally
+PMPNN=home/c21094846/ProteinMPNN # the global path to where the ProteinMPNN github was cloned to locally
 
 # How was this used to generate data?   nohup bash af2_pmpnn.sh &
 
@@ -75,13 +75,13 @@ for dir in "$folder_with_pdbs"/*; do
     fi
 
 
-    python home/c21094846ProteinMPNN/helper_scripts/parse_multiple_chains.py --input_path=$dir --output_path=$path_for_parsed_chains
+    python $ProteinMPNN/helper_scripts/parse_multiple_chains.py --input_path=$dir --output_path=$path_for_parsed_chains
     
-    python home/c21094846ProteinMPNN/helper_scripts/assign_fixed_chains.py --input_path=$path_for_parsed_chains --output_path=$path_for_assigned_chains --chain_list "$chains_to_design"
+    python $ProteinMPNN/helper_scripts/assign_fixed_chains.py --input_path=$path_for_parsed_chains --output_path=$path_for_assigned_chains --chain_list "$chains_to_design"
     
-    python home/c21094846ProteinMPNN/helper_scripts/make_fixed_positions_dict.py --input_path=$path_for_parsed_chains --output_path=$path_for_fixed_positions --chain_list "$chains_to_design" --position_list "$design_only_positions" --specify_non_fixed
+    python $ProteinMPNN/helper_scripts/make_fixed_positions_dict.py --input_path=$path_for_parsed_chains --output_path=$path_for_fixed_positions --chain_list "$chains_to_design" --position_list "$design_only_positions" --specify_non_fixed
     
-    python home/c21094846ProteinMPNN/protein_mpnn_run.py \
+    python $ProteinMPNN/protein_mpnn_run.py \
             --jsonl_path $path_for_parsed_chains \
             --chain_id_jsonl $path_for_assigned_chains \
             --fixed_positions_jsonl $path_for_fixed_positions \
