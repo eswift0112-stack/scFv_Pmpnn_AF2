@@ -466,7 +466,6 @@ def main():
                     seqs.append(line.replace('\n', ''))
                     
     elif args.fasta_file.split('.')[-1] == 'pdb':
-        # Convert the returned string into a dictionary mapping chain 'A' to the sequence
         sequences = {'A': pdb_to_sequence_manual(args.fasta_file)}
     
         for chain, seq in sequences.items():
@@ -475,7 +474,6 @@ def main():
 
     all_loops = []
     # sequence-wise find all loops
-    ls = args.linker_seq
     for seq in seqs:
 
         if args.linker_seq == '':
@@ -487,6 +485,7 @@ def main():
                     linker_seq = ls
                     break
         else:
+            ls = args.linker_seq
             linker_start = seq.find(ls)
             linker_seq = args.linker_seq
 
