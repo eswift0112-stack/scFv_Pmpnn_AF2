@@ -132,42 +132,36 @@ def loops_from_sequence(input_seq, numbering='kabat', linker_seq=''):
 
 
 def pdb_to_sequence_manual(pdb_path):
-    """Manually extracts the amino acid sequence from a PDB file."""
-    # Define a dictionary to convert three-letter codes to one-letter codes
-    three_to_one = {
-        'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D', 'CYS': 'C',
-        'GLU': 'E', 'GLN': 'Q', 'GLY': 'G', 'HIS': 'H', 'ILE': 'I',
-        'LEU': 'L', 'LYS': 'K', 'MET': 'M', 'PHE': 'F', 'PRO': 'P',
-        'SER': 'S', 'THR': 'T', 'TRP': 'W', 'TYR': 'Y', 'VAL': 'V',
-        'SEC': 'U', 'PYL': 'O'  # Including selenocysteine (Sec) and pyrrolysine (Pyl)
+    # Dictionary mapping 3-letter to 1-letter amino acids
+    d3_to_d1 = {
+        'CYS': 'C', 'ASP': 'D', 'SER': 'S', 'GLN': 'Q', 'LYS': 'K',
+        'ILE': 'I', 'PRO': 'P', 'THR': 'T', 'PHE': 'F', 'ASN': 'N', 
+        'GLY': 'G', 'HIS': 'H', 'LEU': 'L', 'ARG': 'R', 'TRP': 'W', 
+        'ALA': 'A', 'VAL': 'V', 'GLU': 'E', 'TYR': 'Y', 'MET': 'M'
     }
-
+    
     sequences = {}
-    last_residue_id = None
-
-    try:
-        with open(pdb_path, 'r') as file:
-            for line in file:
-                if line.startswith("ATOM"):
-                    chain_id = line[21]
-                    residue_name = line[17:20].strip()
-                    residue_id = line[22:27].strip()  # Including insertion code
-
-                    if chain_id not in sequences:
-                        sequences[chain_id] = ''
-
-                    if residue_id != last_residue_id:
-                        if residue_name in three_to_one:
-                            sequences[chain_id] += three_to_one[residue_name]
-                        else:
-                            sequences[chain_id] += '?'  # Unrecognized residue
-                    last_residue_id = residue_id
-
-    except Exception as e:
-        return f"Error reading PDB file: {e}"
-
+    last_res_num = None
+    
+    with open(pdb_path, 'r') as f:
+        for line in f:
+            if line.startswith("ATOM  ") or line.startswith("HETATM"):
+                # Extract clean atom name, residue name, chain ID, and residue number
+                atom_name = line[12:16].strip()
+                res_name = line[17:20].strip()
+                chain_id = line[21].strip()
+                res_num = line[22:26].strip()
+                
+                # Only log the alpha-carbons (CA) to build the single-letter sequence
+                if atom_name == "CA" and res_name in d3_to_d1:
+                    current_key = f"{chain_id}_{res_num}"
+                    if current_key != last_res_num:
+                        if chain_id not in sequences:
+                            sequences[chain_id] = ""
+                        sequences[chain_id] += d3_to_d1[res_name]
+                        last_res_num = current_key
+                        
     return sequences
-
 
 def parse_pdb(pdb_path):
     """ Parse PDB to extract coordinates and other data per atom. """
@@ -465,8 +459,8 @@ def main():
                 if line[0] != '>' and len(line) > 5: # find only protein sequences in fasta file
                     seqs.append(line.replace('\n', ''))
                     
-    elif args.fasta_file.split('.')[-1] == 'pdb':
-        sequences = {'A': pdb_to_sequence_manual(args.fasta_file)}
+        elif args.fasta_file.split('.')[-1] == 'pdb':
+        sequences = pdb_to_sequence_manual(args.fasta_file)
     
         for chain, seq in sequences.items():
             if len(seq) > 30: # try and only extract VH/VL chains and NOT any peptides
